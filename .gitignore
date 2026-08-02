@@ -4,6 +4,7 @@ __pycache__/
 venv/
 .env
 data/chroma_db/
+tests/_tmp_chroma_db/
 *.egg-info/
 .pytest_cache/
 .ruff_cache/
