@@ -54,3 +54,20 @@ def test_model_trains_and_meets_minimum_quality_bar():
     assert metrics["roc_auc"] > 0.7
     assert metrics["precision"] > 0.3
     assert metrics["recall"] > 0.3
+
+
+def test_categorical_codes_are_stable_for_a_single_row_batch(denials_and_members):
+    # Category codes are how XGBoost encodes categorical splits. If a batch
+    # of one row got its own category codes instead of the fixed universe's,
+    # a claim scored on its own (as the denial-risk agent does at inference
+    # time) would silently get a different, wrong feature encoding than the
+    # same claim scored as part of a larger batch.
+    denials_df, members_df = denials_and_members
+    X_batch = build_features(denials_df, members_df)
+
+    row = denials_df.iloc[[0]]
+    X_single = build_features(row, members_df)
+
+    for col in CATEGORICAL_COLUMNS:
+        assert list(X_single[col].cat.categories) == list(X_batch[col].cat.categories)
+        assert X_single[col].cat.codes.iloc[0] == X_batch[col].cat.codes.iloc[0]
