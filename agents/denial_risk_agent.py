@@ -22,6 +22,7 @@ MEDIUM_RISK_MAX = 0.6
 class DenialRiskResult:
     risk_score: float
     risk_band: str  # "low" | "medium" | "high"
+    missing_prior_auth: bool
 
 
 def _band_for_score(score: float) -> str:
@@ -42,4 +43,8 @@ def score_claim(claim: dict, members_df: pd.DataFrame, model: XGBClassifier) -> 
     claim_df = pd.DataFrame([claim])
     features = build_features(claim_df, members_df)
     risk_score = float(model.predict_proba(features)[:, 1][0])
-    return DenialRiskResult(risk_score=risk_score, risk_band=_band_for_score(risk_score))
+    return DenialRiskResult(
+        risk_score=risk_score,
+        risk_band=_band_for_score(risk_score),
+        missing_prior_auth=bool(features["missing_prior_auth"].iloc[0]),
+    )

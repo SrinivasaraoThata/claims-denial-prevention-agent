@@ -56,6 +56,8 @@ def test_missing_prior_auth_scores_higher_risk(members_df, model):
     without_auth = score_claim({**base_claim, "prior_auth_flag": False}, members_df, model)
 
     assert without_auth.risk_score > with_auth.risk_score
+    assert with_auth.missing_prior_auth is False
+    assert without_auth.missing_prior_auth is True
 
 
 def test_score_is_consistent_between_single_and_batch_scoring(members_df, model):
