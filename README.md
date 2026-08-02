@@ -12,8 +12,7 @@ All data used here is synthetic, generated in this repo. No real or
 proprietary claims, member, or policy data is involved.
 
 ## Architecture
-5-agent pipeline built with LangGraph (see [CLAUDE.md](CLAUDE.md) for the
-full design):
+5-agent pipeline built with LangGraph:
 1. Validation agent - checks claim completeness and code formats
 2. Eligibility agent - checks member plan status and coverage dates
 3. Policy RAG agent - retrieves relevant policy text (prior auth rules, etc.)

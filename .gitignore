@@ -8,3 +8,4 @@ tests/_tmp_chroma_db*/
 *.egg-info/
 .pytest_cache/
 .ruff_cache/
+CLAUDE.md
