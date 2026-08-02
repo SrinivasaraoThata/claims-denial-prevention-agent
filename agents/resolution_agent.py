@@ -11,6 +11,7 @@ outcomes: ready to submit, needs info, or human review.
 """
 
 from dataclasses import dataclass, field
+from typing import Optional
 
 from agents.denial_risk_agent import DenialRiskResult
 from agents.eligibility_agent import EligibilityResult
@@ -31,9 +32,11 @@ class ResolutionResult:
 
 def resolve(
     validation: ValidationResult,
-    eligibility: EligibilityResult,
-    denial_risk: DenialRiskResult,
+    eligibility: Optional[EligibilityResult],
+    denial_risk: Optional[DenialRiskResult],
 ) -> ResolutionResult:
+    """eligibility and denial_risk may be None when validation failed and the
+    pipeline skipped straight to resolution without running those agents."""
     if not validation.passed:
         return ResolutionResult(decision=NEEDS_INFO, reasons=list(validation.errors))
 
