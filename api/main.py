@@ -11,9 +11,11 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 import pandas as pd
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 from agents.denial_risk_agent import load_model  # noqa: E402
 from agents.graph import build_graph  # noqa: E402
