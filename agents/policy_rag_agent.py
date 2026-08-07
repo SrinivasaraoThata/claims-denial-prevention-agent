@@ -147,7 +147,7 @@ def _gemini_answer(query: str, chunks: list[PolicyChunk]) -> str | None:
     import google.generativeai as genai
 
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-3.6-flash")
 
     context = "\n\n".join(chunk.text for chunk in chunks)
     prompt = (
