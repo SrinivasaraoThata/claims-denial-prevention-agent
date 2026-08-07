@@ -7,9 +7,10 @@ call), which keeps indexing and tests fast and reproducible; it's a
 reasonable fit for a small, fixed corpus of policy documents that are all
 in-domain insurance language. Answer synthesis uses Gemini when a
 GOOGLE_API_KEY is configured, grounded strictly in the retrieved chunks. If
-no key is configured, the agent falls back to returning the retrieved
-chunks directly rather than failing, so the rest of the pipeline still
-works without a paid/keyed dependency.
+no key is configured, or the Gemini call fails (quota, billing, network),
+the agent falls back to returning the retrieved chunks directly rather
+than failing, so the rest of the pipeline still works without a paid/keyed
+dependency.
 """
 
 import os
@@ -144,6 +145,7 @@ def _gemini_answer(query: str, chunks: list[PolicyChunk]) -> str | None:
     if not api_key:
         return None
 
+    import google.api_core.exceptions
     import google.generativeai as genai
 
     genai.configure(api_key=api_key)
@@ -155,7 +157,10 @@ def _gemini_answer(query: str, chunks: list[PolicyChunk]) -> str | None:
         "excerpts don't cover it, say so explicitly. Be concise.\n\n"
         f"Policy excerpts:\n{context}\n\nQuestion: {query}"
     )
-    response = model.generate_content(prompt)
+    try:
+        response = model.generate_content(prompt)
+    except google.api_core.exceptions.GoogleAPIError:
+        return None
     return response.text.strip()
 
 
