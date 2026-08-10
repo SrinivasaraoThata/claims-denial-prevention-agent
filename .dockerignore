@@ -1,0 +1,14 @@
+.venv/
+.env
+**/__pycache__/
+**/*.pyc
+tests/
+.git/
+CLAUDE.md
+
+# Regenerated at container startup from data/policy_docs (see
+# agents/policy_rag_agent.py:load_collection) - don't ship a stale copy.
+data/chroma_db/
+
+.pytest_cache/
+.ruff_cache/
