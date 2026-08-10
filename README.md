@@ -31,7 +31,7 @@ offline with no model download. Answer synthesis calls Gemini when a
 no key configured it falls back to returning the retrieved excerpts directly
 so the rest of the pipeline still works without a keyed dependency.
 
-Architecture diagram: TBD (see `docs/`).
+Full diagram and per-agent detail: [docs/architecture.md](docs/architecture.md).
 
 ## Results / metrics
 Denial-risk model (XGBoost, trained on 4,000 synthetic historical claims,
@@ -118,7 +118,7 @@ proprietary.
   library without moving to a real embedding model.
 - Decisions are stored in memory, not persisted; they don't survive an API
   restart.
-- Not yet deployed; no live demo link, no Docker image, no CI workflow.
+- Not yet deployed; no live demo link, no CI workflow.
 - No production-grade auth, rate limiting, or monitoring on the API.
 
 ## License
