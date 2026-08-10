@@ -97,7 +97,10 @@ curl -X POST http://127.0.0.1:8000/claims/submit \
 - CI: GitHub Actions
 
 ## Live demo
-TBD once deployed.
+https://claims-denial-prevention-329168059951.us-central1.run.app
+
+Try `/health` or `POST /claims/submit` with the example above, or open
+`/docs` for interactive Swagger UI.
 
 ## Why I built this
 I've worked on claims processing systems professionally and wanted a public,
@@ -118,7 +121,7 @@ proprietary.
   library without moving to a real embedding model.
 - Decisions are stored in memory, not persisted; they don't survive an API
   restart.
-- Not yet deployed; no live demo link, no CI workflow.
+- No CI workflow yet.
 - No production-grade auth, rate limiting, or monitoring on the API.
 
 ## License
