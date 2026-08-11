@@ -54,6 +54,8 @@ script runs.
 
 ## Quick start
 ```bash
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 python data/generate_synthetic_data.py
 python models/train_denial_risk_model.py
@@ -61,13 +63,15 @@ uvicorn api.main:app --reload
 pytest tests/ -v
 ```
 
-The first command regenerates `data/claims.csv`, `data/members.csv`, and
-`data/historical_denials.csv` with a fixed random seed. The second trains the
-denial-risk model on `data/historical_denials.csv` and writes
-`models/denial_risk_model.json` and `models/metrics.json`. The third starts
-the API at `http://127.0.0.1:8000`, with interactive docs at `/docs`. The
-test suite covers the generated data's schema, feature engineering, each
-agent, the LangGraph pipeline, and the API endpoints.
+The first two commands create and activate a virtual environment, and the
+third installs dependencies into it. The fourth command regenerates
+`data/claims.csv`, `data/members.csv`, and `data/historical_denials.csv` with
+a fixed random seed. The fifth trains the denial-risk model on
+`data/historical_denials.csv` and writes `models/denial_risk_model.json` and
+`models/metrics.json`. The sixth starts the API at `http://127.0.0.1:8000`,
+with interactive docs at `/docs`. The test suite covers the generated data's
+schema, feature engineering, each agent, the LangGraph pipeline, and the API
+endpoints.
 
 Try it once the API is running:
 
