@@ -149,9 +149,14 @@ def _gemini_answer(query: str, chunks: list[PolicyChunk]) -> str | None:
         return None
 
     from google import genai
-    from google.genai import errors
+    from google.genai import errors, types
 
-    client = genai.Client(api_key=api_key)
+    client = genai.Client(
+        api_key=api_key,
+        http_options=types.HttpOptions(
+            timeout=5000, retry_options=types.HttpRetryOptions(attempts=1)
+        ),
+    )
 
     context = "\n\n".join(chunk.text for chunk in chunks)
     prompt = (
