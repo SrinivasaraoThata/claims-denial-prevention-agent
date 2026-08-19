@@ -13,6 +13,7 @@ than failing, so the rest of the pipeline still works without a paid/keyed
 dependency.
 """
 
+import logging
 import os
 import pickle
 import re
@@ -21,6 +22,8 @@ from pathlib import Path
 
 import chromadb
 from sklearn.feature_extraction.text import TfidfVectorizer
+
+logger = logging.getLogger(__name__)
 
 POLICY_DOCS_DIR = Path(__file__).resolve().parents[1] / "data" / "policy_docs"
 DEFAULT_PERSIST_DIR = Path(
@@ -145,11 +148,10 @@ def _gemini_answer(query: str, chunks: list[PolicyChunk]) -> str | None:
     if not api_key:
         return None
 
-    import google.api_core.exceptions
-    import google.generativeai as genai
+    from google import genai
+    from google.genai import errors
 
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-3.6-flash")
+    client = genai.Client(api_key=api_key)
 
     context = "\n\n".join(chunk.text for chunk in chunks)
     prompt = (
@@ -158,8 +160,9 @@ def _gemini_answer(query: str, chunks: list[PolicyChunk]) -> str | None:
         f"Policy excerpts:\n{context}\n\nQuestion: {query}"
     )
     try:
-        response = model.generate_content(prompt)
-    except google.api_core.exceptions.GoogleAPIError:
+        response = client.models.generate_content(model="gemini-3.6-flash", contents=prompt)
+    except errors.APIError as e:
+        logger.warning("Gemini call failed, falling back to extractive answer: %s", e)
         return None
     return response.text.strip()
 
